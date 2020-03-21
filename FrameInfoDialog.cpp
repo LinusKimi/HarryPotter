@@ -1,6 +1,7 @@
 //
-// Created by airlc on 2020/3/18.
+// Created by chang on 2020-03-21.
 //
+
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
@@ -124,5 +125,4 @@ void FrameInfoDialog::createConnect() {
     });
     connect(cancelButton, &QPushButton::clicked, this, &FrameInfoDialog::reject);
 }
-
 

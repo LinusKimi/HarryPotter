@@ -22,5 +22,41 @@ foreach (plugin ${Qt5Network_PLUGINS})
     message("Plugin ${plugin} is at location ${_loc}")
 endforeach ()
 
-add_executable(Tools WIN32 main.cpp mainwindow.cpp mainwindow.h FrameInfoDialog.cpp FrameInfoDialog.h)
+set(SOURCE_FILES
+        main.cpp
+        MainWindow.cpp
+        MainWindow.h
+        CalculateCheckSumDialog.cpp
+        CalculateCheckSumDialog.h
+        ConvertDataDialog.cpp
+        ConvertDataDialog.h
+        FrameInfoDialog.cpp
+        FrameInfoDialog.h
+        global.cpp
+        global.h
+        data/AbstractReadWriter.cpp
+        data/AbstractReadWriter.h
+        data/SerialReadWriter.cpp
+        data/SerialReadWriter.h
+        data/TcpServerReadWriter.cpp
+        data/TcpServerReadWriter.h
+        data/BridgeReadWriter.cpp
+        data/BridgeReadWriter.h
+        serial/SerialController.cpp
+        serial/SerialController.h
+        serial/NormalSerialController.cpp
+        serial/NormalSerialController.h
+        serial/LineSerialController.cpp
+        serial/LineSerialController.h
+        serial/FixedBytesSerialController.cpp
+        serial/FixedBytesSerialController.h
+        serial/FrameSerialController.cpp
+        serial/FrameSerialController.h
+        data/TcpClientReadWriter.cpp
+        data/TcpClientReadWriter.h
+        data/SerialBridgeReadWriter.cpp
+        data/SerialBridgeReadWriter.h
+        white.qss)
+
+add_executable(Tools WIN32 ${SOURCE_FILES})
 qt5_use_modules(Tools Widgets Core SerialPort Network)

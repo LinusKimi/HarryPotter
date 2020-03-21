@@ -5,9 +5,6 @@
 #ifndef TOOLS_MAINWINDOW_H
 #define TOOLS_MAINWINDOW_H
 
-#include <QtWidgets/QMainWindow>
-#include "FrameInfoDialog.h"
-
 class QPushButton;
 
 class QComboBox;
@@ -34,16 +31,19 @@ class QButtonGroup;
 
 class SerialController;
 
+#include <QtWidgets/QMainWindow>
+#include "FrameInfoDialog.h"
+
 struct RunConfig {
     QString lastDir;
     QString lastFilePath;
 };
 
-class MainWindow: public QMainWindow {
+
+class MainWindow : public QMainWindow {
 Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = nullptr);
-    ~MainWindow() override;
 
     enum class SerialType {
         Normal = 1,
@@ -53,19 +53,87 @@ public:
         SerialBridge,
     };
 
+    void init();
+
     void initUi();
+
+    void createConnect();
+
+    void createStatusBar();
+
+    ~MainWindow() override;
+
+    enum class SendType {
+        Normal, Line, Frame, FixedBytes
+    };
 
 
 public:
 
 signals:
 
+    void serialStateChanged(bool);
 
+    void writeBytesChanged(qint64 bytes);
+
+    void readBytesChanged(qint64 bytes);
+
+    void currentWriteCountChanged(qint64 count);
 
 public slots:
 
 
+    void openReadWriter();
 
+    void closeReadWriter();
+
+    void sendNextData();
+
+    void readData();
+
+    qint64 writeData(const QByteArray &data);
+
+    void setOpenButtonText(bool isOpen);
+
+    void displayReceiveData(const QByteArray &data);
+
+    void displaySentData(const QByteArray &data);
+
+    void open();
+
+    void save();
+
+    void tool();
+
+    void openDataValidator();
+
+    void openConvertDataDialog();
+
+    void openFrameInfoSettingDialog();
+
+    void clearReceivedData();
+
+    void saveReceivedData();
+
+    void clearSentData();
+
+    void saveSentData();
+
+    void handlerSerialNotOpen();
+
+    void updateStatusMessage(const QString &message);
+
+    void updateReadBytes(qint64 bytes);
+
+    void updateWriteBytes(qint64 bytes);
+
+    void updateCurrentWriteCount(qint64 count);
+
+    void updateTcpClient(const QString &address, qint16 port);
+
+    void clearTcpClient();
+
+    void updateSendType();
 
 
 private:
@@ -74,6 +142,42 @@ private:
     enum class AutoSendState {
         NotStart, Sending, Finish
     };
+
+    bool isReadWriterOpen();
+
+    bool isReadWriterConnected();
+
+    void readSettings();
+
+    void writeSettings();
+
+    FrameInfo readFrameInfo() const;
+
+    void writeFrameInfo(const FrameInfo &info) const;
+
+    void createActions();
+
+    void createMenu();
+
+    void updateSendData(bool isHex, const QString &text);
+
+    void updateSerialPortNames();
+
+    void updateReceiveCount(qint64 count);
+
+    void startAutoSendTimerIfNeed();
+
+    void stopAutoSend();
+
+    void resetSendButtonText();
+
+    void updateTotalSendCount(qint64 count);
+
+    void showReadData(const QByteArray &data);
+
+    void showSendData(const QByteArray &data);
+
+    QStringList getSerialNameList();
 
     RunConfig *runConfig{nullptr};
 
@@ -171,6 +275,17 @@ private:
 
 
     SerialController *serialController{nullptr};
+
+//    int currentSendCount{0};
+    int totalSendCount{0};
+
+    bool _loopSend{false};
+
+    SendType _sendType{SendType::Normal};
+
+    SerialType _serialType{SerialType::Normal};
+
+    int skipSendCount{0};
 
 };
 
