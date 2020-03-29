@@ -56,7 +56,7 @@ set(SOURCE_FILES
         data/TcpClientReadWriter.h
         data/SerialBridgeReadWriter.cpp
         data/SerialBridgeReadWriter.h
-        white.qss)
+        dark_orange.qss)
 
 add_executable(Tools WIN32 ${SOURCE_FILES})
 qt5_use_modules(Tools Widgets Core SerialPort Network)
